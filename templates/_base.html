@@ -6,7 +6,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 <!-- ADD FONT AWESOME FROM https://fontawesome.com/ -->
  <script src="https://kit.fontawesome.com/5668782961.js" crossorigin="anonymous"></script>
- title>{% block title %}{% endblock %} | Django Jokes</title>
+ <title>{% block title %}{% endblock %} | Django Jokes</title>
 </head>
 <body>
 <header>
@@ -63,7 +63,7 @@
       <div class="float-end m-1 me-2">Copyright &copy; 2022 Django Jokes.</div>
       <nav>
         <ul class="nav">
-          <li class="nav-item"><a class="nav-link" href="{% url 'pages:about-us' %}">About</a>
+          <li class="nav-item"><a class="nav-link" href="{% url 'jokes:list' %}">Jokes</a>
           <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
         </ul>
       </nav>
