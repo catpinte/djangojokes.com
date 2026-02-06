@@ -49,8 +49,9 @@ class Category(models.Model):
     def __str__(self):
         return self.category
     
-    class Meta: verbose_name_plural = 'Categories'
-    ordering = ['category']
+    class Meta: 
+        verbose_name_plural = 'Categories'
+        ordering = ['category']
 
 class Tag(models.Model): 
     tag = models.CharField(max_length=50) 
