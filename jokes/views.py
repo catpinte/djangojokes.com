@@ -1,16 +1,17 @@
 import json
 
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Q
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView, DeleteView, DetailView, ListView, UpdateView
 )
 
-from .forms import JokeForm
 from .models import Joke, JokeVote
+from .forms import JokeForm
 
 class JokeCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     model = Joke
@@ -28,16 +29,20 @@ class JokeDeleteView(UserPassesTestMixin, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         result = super().delete(request, *args, **kwargs)
-        messages.success(self.request, 'Joke deleted.')
         return result
 
     def test_func(self):
         obj = self.get_object()
         return self.request.user == obj.user
-    
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Joke deleted.')
+        return super().form_valid(form)
+
 
 class JokeDetailView(DetailView):
     model = Joke
+
 
 class JokeListView(ListView):
     model = Joke
@@ -79,7 +84,6 @@ class JokeListView(ListView):
 
         return (order_fields, order_key, direction)
 
-    
     def get_order_fields(self):
         # Returns a dict mapping friendly names to field names and lookups.
         return {
@@ -91,21 +95,28 @@ class JokeListView(ListView):
             'default_key': 'updated'
         }
 
-    def get_queryset(self): 
-        ordering = self.get_ordering() 
-        qs = Joke.objects.all() 
+    def get_queryset(self):
+        ordering = self.get_ordering()
+        qs = Joke.objects.all()
+
+        if 'q' in self.request.GET: # Filter by search query
+            q = self.request.GET.get('q') 
+            qs = qs.filter(
+                Q(question__icontains=q) | Q(answer__icontains=q)
+            )
         
-        if 'slug' in self.kwargs: # Filter by category or tag 
-            slug = self.kwargs['slug'] 
-            if '/category' in self.request.path_info: 
-                qs = qs.filter(category__slug=slug) 
-            if '/tag' in self.request.path_info: 
-                qs = qs.filter(tags__slug=slug) 
-        elif 'username' in self.kwargs: # Filter by joke creator 
-            username = self.kwargs['username'] 
-            qs = qs.filter(user__username=username) 
-            
-        return qs.order_by(ordering)
+        if 'slug' in self.kwargs: # Filter by category or tag
+            slug = self.kwargs['slug']
+            if '/category' in self.request.path_info:
+                qs = qs.filter(category__slug=slug)
+            if '/tag' in self.request.path_info:
+                qs = qs.filter(tags__slug=slug)
+        elif 'username' in self.kwargs: # Filter by joke creator
+            username = self.kwargs['username']
+            qs = qs.filter(user__username=username)
+
+        return qs.prefetch_related('category', 'user').order_by(ordering)
+
 
 class JokeUpdateView(SuccessMessageMixin, UserPassesTestMixin, UpdateView):
     model = Joke
