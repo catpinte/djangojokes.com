@@ -91,16 +91,13 @@
               {{ joke.user.username }}
             </a>
           </small>
-          {% endif %}
-        </td>
+          {% endif %}     
         <td>
-          {% with votes=joke.votes %}
-          <div id="rating-container" title="{{ votes.rating }}">
+          <div id="rating-container" title="{{ joke.rating }}">
             <div id="rating" style="width:{% widthratio votes.rating 10 100 %}%;"></div>
           </div>
-          ({{ votes.num_votes }} vote{{ votes.num_votes|pluralize }})
-          {% endwith %}
-        </td>
+          ({{ joke.num_votes }} vote{{ joke.num_votes|pluralize }})
+        </td>        
       </tr>
       {% endfor %}
     </tbody>
