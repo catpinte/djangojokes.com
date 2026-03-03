@@ -7,6 +7,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 <link rel="stylesheet" href="{% static 'css/main.css' %}">
 <script src="https://kit.fontawesome.com/f804978a2a.js" crossorigin="anonymous"></script>
+{% block javascript %}{% endblock %}
 <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}">
 <title>{% block title %}{% endblock %} | Django Jokes</title>
 
@@ -48,9 +49,7 @@
               Me
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="{% url 'my-account' %}">
-                My Account
-              </a>
+              <a class="dropdown-item" href="{% url 'my-account' %}">My Account</a>
               <a class="dropdown-item" href="#">My Django Jokes</a>
               <div class="dropdown-divider"></div>
               <form method="post" action="{% url 'account_logout' %}">
@@ -72,18 +71,16 @@
     </div>
   </nav>
 </header>
-<main class="m-4 pb-5">
+<main class="m-4">
   {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <div class="alert message{{ message.tags }} alert-dismissible fade show" role="alert">
-      <strong>{{message}}</strong>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>    
-    </div>
-    {% endfor %}
-  </ul>
+    <ul>
+      {% for message in messages %}
+      <div class="alert message{{ message.tags }} alert-dismissible" role="alert">
+          <strong>{{message}}</strong>
+          <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </ul>
   {% endif %}
   {% block main %}<h2>Welcome!</h2>{% endblock %}
 </main>
