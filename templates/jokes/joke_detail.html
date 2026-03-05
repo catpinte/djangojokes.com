@@ -35,8 +35,8 @@
             <span id="likes">{{ votes.num_likes }}
               like{{ votes.likes|pluralize }}</span> and
             <span id="dislikes">{{ votes.dislikes }}
-              dislike{{ votes.num_dislikes|pluralize }}</span>{% endif %}.</p>
-          {endwith %}
+              dislike{{ votes.dislikes|pluralize }}</span>{% endif %}.</p>
+          {% endwith %}
         {% else %}
           {% csrf_token %}
           {% with votes=joke.votes %}

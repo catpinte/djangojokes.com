@@ -48,6 +48,11 @@ INSTALLED_APPS = [
     # Third-party 
     'crispy_forms', 
     'crispy_bootstrap5',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+    'drf_spectacular',
+    'django_filters',
     'allauth', 
     'allauth.account', 
     'allauth.socialaccount',
