@@ -44,15 +44,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'django_filters',
+    'drf_spectacular',
 
     # Third-party 
     'crispy_forms', 
     'crispy_bootstrap5',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_api_key',
     'djoser',
-    'drf_spectacular',
-    'django_filters',
     'allauth', 
     'allauth.account', 
     'allauth.socialaccount',
@@ -194,6 +195,24 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
 BASE_DIR / 'static',
 ]
+
+# makes all DRF views filtered
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    #'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    # auth can also be set in CBVs and viewsets
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # "DEFAULT_PERMISSION_CLASSES": [  # global setting
+    #         "rest_framework_api_key.permissions.HasAPIKey",
+    # ]
+}
+
 
 # BOTTOM OF settings.py
 if os.environ.get('ENVIRONMENT') != 'production': 
