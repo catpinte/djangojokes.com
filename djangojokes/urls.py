@@ -15,7 +15,7 @@ urlpatterns = [
     path('jobs/', include('jobs.urls')),
     path('jokes/', include('jokes.urls')),
     path('', include('pages.urls')),
-    path('api', include('api.urls'))
+    path('api/', include('api.urls'))
 ]
 if settings.DEBUG: 
     import debug_toolbar 
